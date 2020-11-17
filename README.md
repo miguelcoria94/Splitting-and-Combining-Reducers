@@ -138,6 +138,46 @@ You also need to define a module containing the 'HIRE_FARMER' and 'PAY_FARMER' a
     });
 ```
 
+<h1 align="center">
+Combining reducers
+</h1>
+
+Your reducer setup is now much more modular.
+
+However, createStore only takes one reducer arguement, so you must combine your reducers back into a single reducer to pass to the store.
+
+To do this you'll use the combineReducers method from the redux package and pass it an object that maps state keys to the reducers that handle those slices of state.
+
+Below, the combineREducers maps the fruitReducer for the fruit slice of state and the farmerReducer for the farmers slice of state.
+
+Invoking the combineReducers function returns a single rootReducer that you can use to create your redux store.
+
+// ./src/reducers/rootReducer.js
+
+```js
+    import { combineReducers } from 'redux';
+    import fruitReducer from './fruitReducer';
+    import farmersReducer from './farmersReducer';
+
+    const rootReducer = combineReducers({
+        fruit: fruitReducer,
+        farmers: farmersReducer
+    });
+
+    export default rootReducer;
+```
+
+```js
+    import { createStore } from 'redux';
+    import rootReducer from './reducers/rootReducer';
+
+    const store = createStore(rootReducer);
+
+    export default store;
+```
+
+
+
 
 
 
