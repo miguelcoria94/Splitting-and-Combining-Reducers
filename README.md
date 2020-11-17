@@ -227,6 +227,38 @@ import { HIRE_FARMER, PAY_FARMER } from '../actions/farmersActions';
 export default farmersReducer;
 ```
 
+<h1 align="center">
+Catching and preventing state mutation bugs
+</h1>
+
+Updating the farmersReducer to delegate from farmer state updates to the farmerReducer resolved a suble state mutation big.
+
+Take a look at the original implementation of the farmersREducer function:
+
+```js
+    const farmersReducer = (state = {}, action) => {
+        let nextState = Object.assign({}, state);
+        switch (action.type) {
+            case HIRE_FARMER:
+            const farmerToHire = {
+                id: action.id,
+                name: action.name,
+                paid: false
+            };
+            nextState[action.id] = farmerToHire;
+            return nextState;
+            case PAY_FARMER:
+            const farmerToPay = nextState[action.id];
+            farmerToPay.paid = !farmerToPay.paid;
+            return nextState;
+            default:
+            return state;
+        }
+    };
+```
+
+Notice that the state
+
 
 
 
