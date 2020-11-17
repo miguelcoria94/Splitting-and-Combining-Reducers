@@ -257,7 +257,63 @@ Take a look at the original implementation of the farmersREducer function:
     };
 ```
 
-Notice that the state
+Notice that the state parameter is duplicated to the nextState variable using the Object.assign method:
+
+```js
+    let nextState = Object.assign({}, state);
+```
+
+While this code correctly creates a duplicate of the state object, nextState is only a shallow duplicate as only the top-level object is duplicated.
+
+Each "farmer" object that the state object refers to are still the same objects.
+
+In the PAY_FARMER case clause, the farmer object is mutated by setting the paid property to a new value:
+
+```js
+    case PAY_FARMER:
+    const farmerToPay = nextState[action.id];
+    farmerToPay.paid = !farmerToPay.paid;
+    return nextState;
+```
+
+Now look again at the Pay_FARMER case clause in the version of the farmersReducer that delegates farmer state updates to the farmerReducer:
+
+```js
+    case PAY_FARMER:
+        nextState[action.id] = farmerReducer(nextState[action.id], action);
+        return nextState;
+```
+
+This code calls the farmerReducer by passing in the farmer object for the action.id property value and the action parameter. The farmerReducer has a PAY_FARMER case clause that correctly used the Object.assign method to duplicate the farmer object with the new paid property value.
+
+```js
+    const farmerReducer = (state, action) => {
+  // State is a farmer object.
+        switch (action.type) {
+            case HIRE_FARMER:
+            return {
+                id: action.id,
+                name: action.name,
+                paid: false
+            };
+            case PAY_FARMER:
+            return Object.assign({}, state, {
+                paid: !state.paid
+            });
+            default:
+            return state;
+        }
+        };
+```
+
+Catching state mutation bugs is difficult to do.
+
+Leveraging patterns like reducer compostion can help you from introducing these kinds of bugs int the first place.
+
+Destructuring State in your component
+
+
+
 
 
 
