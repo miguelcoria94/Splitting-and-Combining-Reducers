@@ -176,6 +176,56 @@ Invoking the combineReducers function returns a single rootReducer that you can 
     export default store;
 ```
 
+<h1 align="center">
+Delegating to reducers
+</h1>
+
+Another aspect of reducer compostion involves delegating state updates to suboridnate reducers.
+
+Consider the farmers reducer.
+
+You can modify is so that the farmers reducer delegates to a farmer reducer whenever a single farmers's attributes need to be modified
+
+// ./src/reducers/farmersReducer.js
+
+```js
+
+import { HIRE_FARMER, PAY_FARMER } from '../actions/farmersActions';
+
+    const farmerReducer = (state, action) => {
+        // State is a farmer object.
+        switch (action.type) {
+            case HIRE_FARMER:
+            return {
+                id: action.id,
+                name: action.name,
+                paid: false
+            };
+            case PAY_FARMER:
+            return Object.assign({}, state, {
+                paid: !state.paid
+            });
+            default:
+            return state;
+        }
+    };
+
+    const farmersReducer = (state = {}, action) => {
+        let nextState = Object.assign({}, state);
+        switch (action.type) {
+            case HIRE_FARMER:
+                nextState[action.id] = farmerReducer(undefined, action);
+            return nextState;
+            case PAY_FARMER:
+                nextState[action.id] = farmerReducer(nextState[action.id], action);
+            return nextState;
+            default:
+            return state;
+        }
+    };
+
+export default farmersReducer;
+```
 
 
 
