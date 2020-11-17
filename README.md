@@ -117,6 +117,27 @@ const farmersReducer = (state = {}, action) => {
 export default farmersReducer;
 ```
 
+You also need to define a module containing the 'HIRE_FARMER' and 'PAY_FARMER' actions:
+
+./src/actions/farmersActions.js
+
+```js
+
+    export const HIRE_FARMER = 'HIRE_FARMER';
+    export const PAY_FARMER = 'PAY_FARMER';
+
+    export const hireFarmer = (name) => ({
+        type: HIRE_FARMER,
+        id: new Date().getTime(),
+        name,
+    });
+
+    export const payFarmer = (id) => ({
+        type: PAY_FARMER,
+        id,
+    });
+```
+
 
 
 
