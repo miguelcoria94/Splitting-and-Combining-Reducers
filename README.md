@@ -310,7 +310,6 @@ Catching state mutation bugs is difficult to do.
 
 Leveraging patterns like reducer compostion can help you from introducing these kinds of bugs int the first place.
 
-Destructuring State in your component
 
 
 
